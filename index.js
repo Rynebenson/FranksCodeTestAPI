@@ -34,24 +34,8 @@ const resolvers = {
     Query: {
         specials: async (parent, args) => {
             let { filter } = args;
-    
-            if(!filter) {
-                let response = await Specials.aggregate([
-                    {
-                        $lookup: {
-                            from: 'cheeses',
-                            localField: 'cheese_id',
-                            foreignField: '_id',
-                            as: 'cheese'
-                        }
-                    },
-                    {
-                        $match: {}
-                    }
-                ])
-    
-                return response;
-            }
+
+            console.log(filter)
     
             let response = await Specials.aggregate([
                 {
@@ -63,12 +47,16 @@ const resolvers = {
                     }
                 },
                 {
+                    $unwind: '$cheese'
+                },
+                {
                     $match: {
                         zip: filter
                     }
                 }
             ])
     
+            console.log(response)
             return response;
         }
     }
