@@ -26,7 +26,8 @@ const typeDefs = gql`
     }
 
     type Query {
-        specials(filter: String): [Special]
+        specials(filter: String): [Special],
+        search(filter: String): [Special]
     }
 `;
 
@@ -34,8 +35,6 @@ const resolvers = {
     Query: {
         specials: async (parent, args) => {
             let { filter } = args;
-
-            console.log(filter)
     
             let response = await Specials.aggregate([
                 {
@@ -58,6 +57,12 @@ const resolvers = {
     
             console.log(response)
             return response;
+        },
+        search: async (parent, args, context) => {
+            let { filter } = args,
+                { zip } = context;
+
+            console.log(filter, zip)
         }
     }
 }
