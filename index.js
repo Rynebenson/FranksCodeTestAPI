@@ -58,8 +58,7 @@ const resolvers = {
             return response;
         },
         search: async (parent, args, context) => {
-            let { filter } = args,
-                { zip } = context;
+            let { filter, zip } = args;
 
             console.log(filter, zip)
         }
