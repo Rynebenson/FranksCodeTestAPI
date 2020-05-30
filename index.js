@@ -27,7 +27,7 @@ const typeDefs = gql`
 
     type Query {
         specials(filter: String): [Special],
-        search(filter: String): [Special]
+        search(filter: String, zip: String): [Special]
     }
 `;
 
@@ -60,7 +60,44 @@ const resolvers = {
         search: async (parent, args, context) => {
             let { filter, zip } = args;
 
-            console.log(filter, zip)
+            let response = await Specials.aggregate([
+                {
+                    $lookup: {
+                        from: "cheeses",
+                        localField: "cheese_id",
+                        foreignField: "_id",
+                        as: "cheese",
+                        pipeline: [
+                            {
+                                $match: {
+                                    $or: [
+                                        {
+                                            cheese: {
+                                                name: filter
+                                            }
+                                        },
+                                        {
+                                            cheese: {
+                                                country: filter
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    $unwind: "$cheese"
+                },
+                {
+                    $match: {
+                        zip: zip
+                    }
+                }
+            ])
+
+            return response;
         }
     }
 }
