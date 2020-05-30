@@ -14,7 +14,7 @@ const typeDefs = gql`
         _id: ID
         name: String
         country: String
-        price: String
+        price: Float
     }
 
     type Special {
@@ -26,7 +26,7 @@ const typeDefs = gql`
     }
 
     type Query {
-        specials(filter: String): [Special],
+        specials(filter: String, zip: String): [Special],
         search(filter: String, zip: String): [Special]
     }
 `;
@@ -34,7 +34,61 @@ const typeDefs = gql`
 const resolvers = {
     Query: {
         specials: async (parent, args, context) => {
-            let { filter } = args;
+            let { filter, zip } = args;
+
+            if(filter && zip) {
+                filter = filter.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+
+                let response = await Specials.aggregate([
+                    {
+                        $lookup: {
+                            from: "cheeses",
+                            let: { cheese_id: "$cheese_id" },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $and: [
+                                                {
+                                                    $eq: ["$$cheese_id", "$_id"]
+                                                },
+                                                {
+                                                    $or: [
+                                                        {
+                                                            $eq: ["$name", filter]
+                                                        },
+                                                        {
+                                                            $eq: ["$country", filter]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ],
+                            as: "cheese"
+                        }
+                    },
+                    {
+                        $unwind: "$cheese"
+                    },
+                    {
+                        $match: {
+                            $and: [
+                                {
+                                    zip: zip
+                                },
+                                {
+                                    out_of_stock: false
+                                }
+                            ]
+                        }
+                    }
+                ])
+    
+                return response;
+            }
     
             let response = await Specials.aggregate([
                 {
@@ -59,43 +113,6 @@ const resolvers = {
         },
         search: async (parent, args) => {
             let { filter, zip } = args;
-
-            let response = await Specials.aggregate([
-                {
-                    $match: { zip: zip }
-                },
-                {
-                    $lookup: {
-                        from: "cheeses",
-                        let: { cheese_id: "$cheese_id" },
-                        pipeline: [
-                            {
-                                $match: {
-                                    $or: [
-                                        {
-                                            cheese: {
-                                                name: filter
-                                            }
-                                        },
-                                        {
-                                            cheese: {
-                                                country: filter
-                                            }
-                                        }
-                                    ]
-                                }
-                            }
-                        ],
-                        as: "cheese"
-                    }
-                },
-                {
-                    $unwind: "$cheese"
-                }
-            ])
-
-            console.log(response)
-            return response;
         }
     }
 }
