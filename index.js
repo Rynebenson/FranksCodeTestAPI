@@ -26,8 +26,7 @@ const typeDefs = gql`
     }
 
     type Query {
-        specials(filter: String, zip: String): [Special],
-        search(filter: String, zip: String): [Special]
+        specials(filter: String, zip: String): [Special]
     }
 `;
 
@@ -110,9 +109,6 @@ const resolvers = {
             ])
     
             return response;
-        },
-        search: async (parent, args) => {
-            let { filter, zip } = args;
         }
     }
 }
