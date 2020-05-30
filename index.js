@@ -57,16 +57,17 @@ const resolvers = {
     
             return response;
         },
-        search: async (parent, args, context) => {
+        search: async (parent, args) => {
             let { filter, zip } = args;
 
             let response = await Specials.aggregate([
                 {
+                    $match: { zip: zip }
+                },
+                {
                     $lookup: {
                         from: "cheeses",
-                        localField: "cheese_id",
-                        foreignField: "_id",
-                        as: "cheese",
+                        let: { cheese_id: "$cheese_id" },
                         pipeline: [
                             {
                                 $match: {
@@ -84,19 +85,16 @@ const resolvers = {
                                     ]
                                 }
                             }
-                        ]
+                        ],
+                        as: "cheese"
                     }
                 },
                 {
                     $unwind: "$cheese"
-                },
-                {
-                    $match: {
-                        zip: zip
-                    }
                 }
             ])
 
+            console.log(response)
             return response;
         }
     }
