@@ -55,10 +55,10 @@ const resolvers = {
                                                 {
                                                     $or: [
                                                         {
-                                                            $eq: ["$name", { $regex: filter }]
+                                                            $eq: ["$name", filter]
                                                         },
                                                         {
-                                                            $eq: ["$country", { $regex: filter }]
+                                                            $eq: ["$country", filter]
                                                         }
                                                     ]
                                                 }
