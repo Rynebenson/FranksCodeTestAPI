@@ -36,8 +36,6 @@ const resolvers = {
             let { filter, zip } = args;
 
             if(filter && zip) {
-                filter = filter.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-
                 let response = await Specials.aggregate([
                     {
                         $lookup: {
@@ -50,10 +48,10 @@ const resolvers = {
                                             {
                                                 $or: [
                                                     {
-                                                        name: { $regex: filter }
+                                                        name: { $regex: filter, $options: "i" }
                                                     },
                                                     {
-                                                        country: { $regex: filter }
+                                                        country: { $regex: filter, $options: "i" }
                                                     }
                                                 ]
                                             },
