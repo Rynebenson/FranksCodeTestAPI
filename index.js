@@ -59,11 +59,7 @@ const resolvers = {
                                             },
                                             {
                                                 $expr: {
-                                                    $and: [
-                                                        {
-                                                            $eq: ["$$cheese_id", "$_id"]
-                                                        }
-                                                    ]
+                                                    $eq: ["$$cheese_id", "$_id"]
                                                 }
                                             }
                                         ]
