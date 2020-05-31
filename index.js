@@ -46,23 +46,27 @@ const resolvers = {
                             pipeline: [
                                 {
                                     $match: {
-                                        $expr: {
-                                            $and: [
-                                                {
-                                                    $eq: ["$$cheese_id", "$_id"]
-                                                },
-                                                {
-                                                    $or: [
+                                        $and: [
+                                            {
+                                                $or: [
+                                                    {
+                                                        name: { $regex: filter }
+                                                    },
+                                                    {
+                                                        country: { $regex: filter }
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                $expr: {
+                                                    $and: [
                                                         {
-                                                            $eq: ["$name", filter]
-                                                        },
-                                                        {
-                                                            $eq: ["$country", filter]
+                                                            $eq: ["$$cheese_id", "$_id"]
                                                         }
                                                     ]
                                                 }
-                                            ]
-                                        }
+                                            }
+                                        ]
                                     }
                                 }
                             ],
