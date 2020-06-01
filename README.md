@@ -47,11 +47,9 @@ Now open the second tab and run these commands to clone the server repository an
 
 For security purposes I ommitted my database. For this project to fully work you will have to create a MongoDB Database. Then add the uri string into a file named config.js. The contents of the config.js file should look like the following:
 
- `
- module.exports = {
-  database: "<MongoDB-URI>"
- }
- `
+  `module.exports = {`
+  `    database: "<MongoDB-URI>"`
+  `}`
 
 <a name="run-server"></a>
 ## 3. Run the Server
