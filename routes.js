@@ -42,6 +42,8 @@ module.exports = function(app, config) {
                 await special.save()
                 console.log(`Special saved - ${i}/${data.length}`)
             }
+
+            res.send('Data converted successfully...')
         })
     });
 }
