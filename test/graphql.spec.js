@@ -1,4 +1,3 @@
-const app = require("../index")
 const request = require("supertest")
 const chai = require("chai")
 
@@ -6,7 +5,7 @@ const expect = chai.expect
 const should = chai.should()
 
 describe('GraphQL', () => {
-    it('Fetch Specials In Service Area 91001', done => {
+    it('Fetch Specials In Service Area', done => {
         request("http://localhost:3001/graphql")
             .post('/graphql')
             .send({ query: '{ specials(filter:"91001") { _id cheese { _id name country price } zip percent_discount out_of_stock  } }' })
