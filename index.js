@@ -118,3 +118,5 @@ const server = new ApolloServer({ typeDefs, resolvers })
 server.applyMiddleware({ app })
 
 app.listen(process.env.PORT || 3001, () => console.log("Server running..."))
+
+module.exports = app, server;
