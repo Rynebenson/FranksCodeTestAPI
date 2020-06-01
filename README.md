@@ -45,7 +45,7 @@ Now open the second tab and run these commands to clone the server repository an
 <a name="connect-database"></a>
 ## 3. Connect Database
 
-For security purposes I ommitted my database. For this project to full work you will have to create a MongoDB Database. Then add the uri string into a file named config.js. The contents of the config.js file should look like the following:
+For security purposes I ommitted my database. For this project to fully work you will have to create a MongoDB Database. Then add the uri string into a file named config.js. The contents of the config.js file should look like the following:
 
  `
  module.exports = {
