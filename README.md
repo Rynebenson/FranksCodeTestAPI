@@ -39,9 +39,7 @@ Run these commands to download this repository and install all dependencies.
 
 For security purposes I ommitted my database. For this project to fully work you will have to create a MongoDB Database. I would suggest using heroku MLab addon. Then add the uri string into a file named config.js. The contents of the config.js file should look like the following:
 
-  `module.exports = {`
-  `    database: "<MongoDB-URI>"`
-  `}`
+  `module.exports = { database: "<MongoDB-URI>" }`
 
 <a name="run-server"></a>
 ## 4. Run the Server
